@@ -16,5 +16,9 @@
         "default_title":"Pomodoro Timer",
         "default_popup":"popup.html"
 
-    }
+    },
+    "permissions": [
+        "storage"
+    
+    ]
 }

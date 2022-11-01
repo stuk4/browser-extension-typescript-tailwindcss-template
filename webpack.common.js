@@ -5,20 +5,27 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
    entry: {
-      popup:path.resolve('src/popup/popup.html'),
+      popup:path.resolve('src/popup.ts'),
+      // popup: path.resolve(__dirname,"src","popup","popup.ts"),
       background: path.resolve(__dirname,"src","background","background.ts"),
+      contentScript: path.resolve(__dirname,"src","contentScript","contentScript.ts"),
    },
 
    resolve: {
-      extensions: [".ts", ".js",'.tsx','html'],
+      extensions: [".ts", ".js",'.tsx'],
    },
    module: {
       rules: [
          {
-            test: /\.tsx?$/,
-            loader: "ts-loader",
+            test: /\.(js|ts)x?$/,
+            use: ['babel-loader'],
             exclude: /node_modules/,
-         },
+          },
+         // {
+         //    test: /\.tsx?$/,
+         //    loader: "ts-loader",
+         //    exclude: /node_modules/,
+         // },
          {
             test: /\.css$/i,
             use: ['postcss-loader'],
@@ -48,28 +55,34 @@ module.exports = {
                   from: path.resolve(__dirname,"src","assets"), 
                   to: path.resolve(__dirname,"dist")
               
-              }
+               },
+               {
+                  from: path.resolve(__dirname,"src","popup"), 
+                  to: path.resolve(__dirname,"dist")
+              
+               }
             ]
         }
       ),
-      new HtmlPlugin({
-         title: 'Pomodoro Timer',
-         filename: 'popup.html',
-         chunks: ['popup'],
-         template: 'src/popup/popup.html',
-       })
+      // new HtmlPlugin({
+      //    title: 'Pomodoro Timer',
+      //    filename: 'popup.html',
+      //    chunks: ['popup'],
+      //    template: 'src/popup/popup.html',
+      //  })
    ],
    output: {
       filename: "[name].js",
       path: path.join(__dirname, "dist"),
+      clean:true
    },
-   optimization: {
-      splitChunks: {
-        chunks(chunk) {
-          return chunk.name !== 'contentScript' && chunk.name !== 'background'
-        }
-      },
-    }
+   // optimization: {
+   //    splitChunks: {
+   //      chunks(chunk) {
+   //        return chunk.name !== 'contentScript' && chunk.name !== 'background'
+   //      }
+   //    },
+   //  }
 };
 // Option for react app
 // function getHtmlPlugins(chunks) {
